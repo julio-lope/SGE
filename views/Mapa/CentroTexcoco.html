@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.0/dist/leaflet.css" />
+<link rel="stylesheet" href="src/leaflet-search.css" />
+<link rel="stylesheet" href="examples/style.css" />
+<style>
+.leaflet-marker-icon {
+	color: #ffffff;
+	font-size: 16px;
+	line-height: 16px;
+	text-align: center;
+	vertical-align: middle;
+	box-shadow: 2px 1px 4px rgba(0,0,0,0.3);
+	border-radius: 50px;
+	border:8px solid #ff0000;
+}
+.search-tip b {
+	color: #fff;
+}
+
+.Secretario.leaflet-marker-icon {
+       border-radius: 50px;
+       border:8px solid #008f39;
+}
+
+.Secretario.search-tip b,
+.Secretario.leaflet-marker-icon {
+	background: #008f39;
+}
+.Secretario-de.leaflet-marker-icon {
+	border-radius: 50px;
+       border:8px solid #FF8CC8;
+}
+.Secretario-de.search-tip b,
+.Secretario-de.leaflet-marker-icon {
+	background: #FF8CC8;
+}
+.Secretario-de-Finanzas.leaflet-marker-icon {
+	border-radius: 50px;
+       border:8px solid #EA4C88;
+}
+.Secretario-de-Finanzas.search-tip b,
+.Secretario-de-Finanzas.leaflet-marker-icon {
+	background: #EA4C88;
+}
+.Secretario-de-Gestion.leaflet-marker-icon {
+	border-radius: 50px;
+       border:8px solid  #008B80;
+}
+.Secretario-de-Gestion.search-tip b,
+.Secretario-de-Gestion.leaflet-marker-icon {
+	background: #008B80;
+}
+.Secretario-de-Informacion.leaflet-marker-icon {
+	border-radius: 50px;
+       border:8px solid #F1C40F;
+}
+.Secretario-de-Informacion.search-tip b,
+.Secretario-de-Informacion.leaflet-marker-icon {
+	background: #F1C40F;
+}
+
+.Afiliado.search-tip b,
+.Afiliado.leaflet-marker-icon {
+	background: #ff0000
+}
+.Presidente.leaflet-marker-icon {
+	border-radius: 50px;
+       border:8px solid #0057A0;
+	
+}
+
+.Presidente.search-tip b,
+.Presidente.leaflet-marker-icon {
+	background: #0057A0;
+	
+}
+
+.restaurant.search-tip b,
+.restaurant.leaflet-marker-icon {
+	background: #66f
+}
+.search-tip {
+	white-space: nowrap;
+}
+.search-tip b {
+	display: inline-block;
+	clear: left;
+	float: right;
+	padding: 0 4px;
+	margin-left: 4px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet@1.3.0/dist/leaflet.js"></script>
+<script src="src/leaflet-search.js"></script>
+<script src="examples/data/CentroTexcoco.geojson.js"></script>
+<script>
+
+	var map = L.map('map', {
+			zoom: 14,
+			center: new L.latLng(19.512556, -98.882896),
+			layers: L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')
+		}),
+
+		geojsonOpts = {
+			pointToLayer: function(feature, latlng) {
+				return L.marker(latlng, {
+					icon: L.divIcon({
+						className: feature.properties.amenity,
+						iconSize: L.point(16, 16),
+						html: feature.properties.amenity[0].toUpperCase(),
+					})
+				}).bindPopup(feature.properties.amenity+'<br><b>'+feature.properties.name+'</b>');
+			}
+		};
+
+	var poiLayers = L.layerGroup([
+		L.geoJson(Centro, geojsonOpts)
+	])
+	.addTo(map);
+
+var col6 = L.polygon([
+  [19.517916, -98.885649],
+  [19.509320, -98.886261],
+  [19.509239, -98.885242],
+  [19.507744, -98.885381],
+  [19.507683, -98.884552],
+  [19.506156, -98.884630],
+  [19.506110, -98.884665],
+  [19.506062, -98.883148],
+  [19.510656, -98.882703],
+  [19.510625, -98.882688],
+  [19.510443, -98.879437],
+  [19.509594, -98.880617],
+  [19.509554, -98.880295],
+  [19.508138, -98.880552],
+  [19.508017, -98.879007],
+  [19.505863, -98.880649],
+  [19.505802, -98.880595],
+  [19.505672, -98.876786],
+  [19.505644, -98.876510],
+  [19.505887, -98.876416],
+  [19.509227, -98.876117],
+  [19.509449, -98.878477],
+  [19.511687, -98.878280],
+  [19.511755, -98.879243],
+  [19.515269, -98.878994],
+  [19.515302, -98.879010],
+  [19.516675, -98.878895],
+  [19.516721, -98.878919],
+  [19.517257, -98.878871],
+  [19.517486, -98.881907],
+  [19.519579, -98.881789],
+  [19.519569, -98.882004],
+  [19.518366, -98.882122],
+  [19.518508, -98.884278],
+  [19.517072, -98.884364],
+  [19.517153, -98.885072]
+], {
+	color: '#FF33F6'
+}).addTo(map);
+col6.bindPopup("Texcoco Centro.");
+
+	L.control.search({
+		layer: poiLayers,
+		initial: false,
+		propertyName: 'name',
+		buildTip: function(text, val) {
+			var type = val.layer.feature.properties.amenity;
+			return '<a href="#" class="'+type+'">'+text+'<b>'+type+'</b></a>';
+		}
+	})
+	.addTo(map);
+
+</script>
+\<!--<div id="copy"><a href="http://labs.easyblog.it/">Labs</a> &bull; <a rel="author" href="http://labs.easyblog.it/stefano-cudini/">Stefano Cudini</a></div>-->
+
+<script type="text/javascript" src="/labs-common.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.0/dist/leaflet.css" />
+<link rel="stylesheet" href="src/leaflet-search.css" />
+<link rel="stylesheet" href="examples/style.css" />
+<style>
+.leaflet-marker-icon {
+	color: #ffffff;
+	font-size: 16px;
+	line-height: 16px;
+	text-align: center;
+	vertical-align: middle;
+	box-shadow: 2px 1px 4px rgba(0,0,0,0.3);
+	border-radius: 50px;
+	border:8px solid #ff0000;
+}
+.search-tip b {
+	color: #fff;
+}
+
+.Secretario.leaflet-marker-icon {
+       border-radius: 50px;
+       border:8px solid #008f39;
+}
+
+.Secretario.search-tip b,
+.Secretario.leaflet-marker-icon {
+	background: #008f39;
+}
+.Secretario-de.leaflet-marker-icon {
+	border-radius: 50px;
+       border:8px solid #FF8CC8;
+}
+.Secretario-de.search-tip b,
+.Secretario-de.leaflet-marker-icon {
+	background: #FF8CC8;
+}
+.Secretario-de-Finanzas.leaflet-marker-icon {
+	border-radius: 50px;
+       border:8px solid #EA4C88;
+}
+.Secretario-de-Finanzas.search-tip b,
+.Secretario-de-Finanzas.leaflet-marker-icon {
+	background: #EA4C88;
+}
+.Secretario-de-Gestion.leaflet-marker-icon {
+	border-radius: 50px;
+       border:8px solid  #008B80;
+}
+.Secretario-de-Gestion.search-tip b,
+.Secretario-de-Gestion.leaflet-marker-icon {
+	background: #008B80;
+}
+.Secretario-de-Informacion.leaflet-marker-icon {
+	border-radius: 50px;
+       border:8px solid #F1C40F;
+}
+.Secretario-de-Informacion.search-tip b,
+.Secretario-de-Informacion.leaflet-marker-icon {
+	background: #F1C40F;
+}
+
+.Afiliado.search-tip b,
+.Afiliado.leaflet-marker-icon {
+	background: #ff0000
+}
+.Presidente.leaflet-marker-icon {
+	border-radius: 50px;
+       border:8px solid #0057A0;
+	
+}
+
+.Presidente.search-tip b,
+.Presidente.leaflet-marker-icon {
+	background: #0057A0;
+	
+}
+
+.restaurant.search-tip b,
+.restaurant.leaflet-marker-icon {
+	background: #66f
+}
+.search-tip {
+	white-space: nowrap;
+}
+.search-tip b {
+	display: inline-block;
+	clear: left;
+	float: right;
+	padding: 0 4px;
+	margin-left: 4px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet@1.3.0/dist/leaflet.js"></script>
+<script src="src/leaflet-search.js"></script>
+<script src="examples/data/SanMiguel.geojson.js"></script>
+<script>
+
+	var map = L.map('map', {
+			zoom: 14,
+			center: new L.latLng(19.512556, -98.882896),
+			layers: L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')
+		}),
+
+
+		geojsonOpts = {
+			pointToLayer: function(feature, latlng) {
+				return L.marker(latlng, {
+					icon: L.divIcon({
+						className: feature.properties.amenity,
+						iconSize: L.point(16, 16),
+						html: feature.properties.amenity[0].toUpperCase(),
+					})
+				}).bindPopup(feature.properties.amenity+'<br><b>'+feature.properties.name+'</b>');
+			}
+		};
+
+	var poiLayers = L.layerGroup([
+		L.geoJson(Miguel, geojsonOpts)
+	])
+	.addTo(map);
+
+var col3 = L.polygon([
+  [19.524561, -98.914392],
+  [19.522731, -98.915336],
+  [19.522620, -98.915465],
+  [19.522494, -98.915427],
+  [19.522426, -98.915365],
+  [19.522156, -98.912723],
+  [19.520925, -98.912656],
+  [19.520920, -98.912047],
+  [19.513194, -98.912609],
+  [19.513154, -98.912569],
+  [19.512958, -98.905232],
+  [19.513555, -98.894370],
+  [19.515224, -98.894526],
+  [19.515262, -98.893587],
+  [19.516326, -98.893402],
+  [19.516468, -98.893541],
+  [19.516599, -98.894619],
+  [19.519767, -98.894716],
+  [19.520384, -98.894791],
+  [19.521011, -98.895022],
+  [19.520998, -98.895097],
+  [19.521822, -98.895585],
+  [19.522280, -98.895995],
+  [19.522912, -98.896574],
+  [19.522643, -98.896952],
+  [19.525494, -98.900999],
+  [19.525642, -98.908281],
+  [19.525164, -98.908673],
+  [19.523890, -98.908925]
+], {
+	color: 'purple'
+}).addTo(map);
+col3.bindPopup("Col. San Miguel Tocuila.");
+
+	L.control.search({
+		layer: poiLayers,
+		initial: false,
+		propertyName: 'name',
+		buildTip: function(text, val) {
+			var type = val.layer.feature.properties.amenity;
+			return '<a href="#" class="'+type+'">'+text+'<b>'+type+'</b></a>';
+		}
+	})
+	.addTo(map);
+
+</script>
+\<!--<div id="copy"><a href="http://labs.easyblog.it/">Labs</a> &bull; <a rel="author" href="http://labs.easyblog.it/stefano-cudini/">Stefano Cudini</a></div>-->
+
+<script type="text/javascript" src="/labs-common.js"></script>
+
+</body>
+</html>
